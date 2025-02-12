@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microsoft Security Breach Warning</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function playWarningAudio() {
+            var audio = document.getElementById("warning-audio");
+            audio.loop = true;
+            audio.play();
+        }
+    </script>
+</head>
+<body onload="playWarningAudio()">
+    <div class="error-page">
+        <img src="microsoft-logo-3d.png" alt="Microsoft Logo" class="logo">
+        <h1 class="error-message">⚠ MICROSOFT SECURITY BREACH WARNING ⚠</h1>
+        <p class="subtext">Your server has encountered a critical security breach. Immediate action is required!</p>
+        <img src="server-failed-warning.png" alt="Server Breach Warning" class="warning-image">
+        <div class="popup">
+            <p>Call Microsoft Support: <strong>+1-800-XXX-XXXX</strong></p>
+        </div>
+    </div>
+    <audio id="warning-audio" src="warning-sound.mp3"></audio>
+</body>
+</html>

